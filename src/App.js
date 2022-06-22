@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import { useRef, Suspense } from "react"
+import { Canvas, useFrame } from "@react-three/fiber"
+import ArmchairYellow from "./ArmchairYellow"
 
-function App() {
+export default function App() {
+  const Cube = () => {
+    const meshRef = useRef(null)
+
+    useFrame(() => {
+      if (!meshRef.current) {
+        return
+      }
+
+      meshRef.current.rotation.y += 0.01
+    })
+
+    return (
+      <>
+        <mesh ref={meshRef}>
+          <ArmchairYellow />
+        </mesh>
+      </>
+    )
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="text-container">
+        <div className="text">Nono.</div>
+      </div>
+      <Canvas
+        camera={{ position: [20, 60, 50], fov: 50 }}
+        colorManagement
+        style={{ height: "100vh" }}
+      >
+        <directionalLight intensity={0.5} />
+        <pointLight position={[10, 10, 120]} />
+        <Suspense>
+          <Cube />
+        </Suspense>
+      </Canvas>
     </div>
-  );
+  )
 }
-
-export default App;
